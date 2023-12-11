@@ -94,6 +94,21 @@ impl Position {
             .flat_map(move |idx| (min_y..=max_y).map(move |idy| Position::new(idx, idy)))
             .filter(move |p| p.x != self.x || p.y != self.y)
     }
+
+    pub fn manhattan_distance(self, other: Self) -> usize {
+        let dx = if self.x > other.x {
+            self.x - other.x
+        } else {
+            other.x - self.x
+        };
+        let dy = if self.y > other.y {
+            self.y - other.y
+        } else {
+            other.y - self.y
+        };
+
+        dx + dy
+    }
 }
 
 impl std::ops::Add<Direction> for Position {
