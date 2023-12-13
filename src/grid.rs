@@ -18,6 +18,14 @@ impl<T> Grid<T> {
         }
     }
 
+    pub fn height(&self) -> usize {
+        self.height
+    }
+
+    pub fn width(&self) -> usize {
+        self.width
+    }
+
     pub fn get(&self, position: Position) -> Option<&T> {
         if position.x < self.width {
             self.grid.get(position.x + position.y * self.width)
@@ -42,7 +50,7 @@ impl<T> Grid<T> {
         self.grid
             .iter()
             .skip(idx)
-            .step_by(self.height)
+            .step_by(self.width)
             .take(self.height)
     }
 
