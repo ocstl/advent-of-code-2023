@@ -1,4 +1,8 @@
-#[derive(Debug, Clone)]
+use std::cmp::Ordering;
+use std::iter::{Skip, StepBy, Take};
+use std::slice::{Iter, IterMut};
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Grid<T> {
     height: usize,
     width: usize,
@@ -42,13 +46,57 @@ impl<T> Grid<T> {
         }
     }
 
-    pub fn row(&self, idy: usize) -> impl Iterator<Item = &T> {
+    pub fn get_mut_tuple(
+        &mut self,
+        positions: (Position, Position),
+    ) -> Option<(Option<&mut T>, Option<&mut T>)> {
+        if positions.0 == positions.1 {
+            return None;
+        }
+
+        let p1 = positions.0.x + positions.0.y * self.width;
+        let p2 = positions.1.x + positions.1.y * self.width;
+
+        match p1.cmp(&p2) {
+            Ordering::Equal => None,
+            Ordering::Greater => {
+                if p1 <= self.grid.len() {
+                    let (left, right) = self.grid.split_at_mut(p1);
+                    Some((right.first_mut(), left.get_mut(p2)))
+                } else {
+                    Some((None, self.grid.get_mut(p2)))
+                }
+            }
+            Ordering::Less => {
+                if p2 <= self.grid.len() {
+                    let (left, right) = self.grid.split_at_mut(p2);
+                    Some((left.get_mut(p1), right.first_mut()))
+                } else {
+                    Some((self.grid.get_mut(p1), None))
+                }
+            }
+        }
+    }
+
+    pub fn row(&self, idy: usize) -> Take<Skip<Iter<'_, T>>> {
         self.grid.iter().skip(idy * self.width).take(self.width)
     }
 
-    pub fn column(&self, idx: usize) -> impl Iterator<Item = &T> {
+    pub fn row_mut(&mut self, idy: usize) -> Take<Skip<IterMut<'_, T>>> {
+        self.grid.iter_mut().skip(idy * self.width).take(self.width)
+    }
+
+    pub fn column(&self, idx: usize) -> Take<StepBy<Skip<Iter<'_, T>>>> {
         self.grid
             .iter()
+            .skip(idx)
+            .step_by(self.width)
+            .take(self.height)
+    }
+
+    pub fn column_mut(&mut self, idx: usize) -> Take<StepBy<Skip<IterMut<'_, T>>>> {
+        self.grid
+            .iter_mut()
             .skip(idx)
             .step_by(self.width)
             .take(self.height)
