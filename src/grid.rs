@@ -111,10 +111,10 @@ impl<T> Grid<T> {
     }
 }
 
-#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Position {
-    x: usize,
     y: usize,
+    x: usize,
 }
 
 impl Position {
@@ -187,7 +187,7 @@ impl std::ops::Add<Direction> for Position {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Direction {
     Up,
     Down,
