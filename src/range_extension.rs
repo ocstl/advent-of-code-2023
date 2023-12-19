@@ -3,7 +3,6 @@ use std::ops::Range;
 pub trait RangeExtension {
     fn contains_range(&self, other: &Self) -> bool;
     fn overlaps(&self, other: &Self) -> bool;
-
     fn intersection(&self, other: &Self) -> Self;
 }
 
