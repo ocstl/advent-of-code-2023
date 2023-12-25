@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 num-integer = "0.1.45"
 rangemap = "1.4.0"
+z3 = "0.12.1"
