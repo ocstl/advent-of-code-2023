@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+graphrs = "0.7.0"
 num-integer = "0.1.45"
 rangemap = "1.4.0"
 z3 = "0.12.1"
